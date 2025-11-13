@@ -1,7 +1,7 @@
 {
-  "name": "minilitedb-demo",
+  "name": "tetodb-demo",
   "version": "1.0.0",
-  "description": "MiniLiteDB - A tiny embeddable NoSQL database compiled to WebAssembly",
+  "description": "TetoDB - A tiny embeddable NoSQL database compiled to WebAssembly",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

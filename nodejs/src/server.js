@@ -1,12 +1,12 @@
 /**
- * MiniLiteDB Express Demo Server
+ * TetoDB Express Demo Server
  *
- * This demonstrates how to use the MiniLiteDB WASM database
+ * This demonstrates how to use the TetoDB WASM database
  * in a Node.js Express application.
  */
 
 const express = require('express');
-const { MiniLiteDB } = require('./minilite');
+const { TetoDB } = require('./tetodb');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,8 +21,8 @@ let db;
 let usersCollection;
 
 async function initDatabase() {
-  console.log('Initializing MiniLiteDB...');
-  db = new MiniLiteDB();
+  console.log('Initializing TetoDB...');
+  db = new TetoDB();
   await db.open(DB_PATH);
   usersCollection = db.collection('users');
   console.log('Database initialized successfully!');
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
  */
 app.get('/', (req, res) => {
   res.json({
-    message: 'Welcome to MiniLiteDB Demo API',
+    message: 'Welcome to TetoDB Demo API',
     endpoints: {
       'GET /': 'This message',
       'GET /users': 'List all users',
@@ -331,7 +331,7 @@ async function startServer() {
 
     app.listen(PORT, () => {
       console.log(`\n========================================`);
-      console.log(`MiniLiteDB Demo Server`);
+      console.log(`TetoDB Demo Server`);
       console.log(`========================================`);
       console.log(`Server running on http://localhost:${PORT}`);
       console.log(`Database file: ${DB_PATH}`);

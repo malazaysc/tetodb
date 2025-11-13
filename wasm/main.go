@@ -14,21 +14,21 @@ var db *engine.Database
 // main is the entry point for the WASM module
 // It registers JavaScript functions and keeps the Go runtime alive
 func main() {
-	fmt.Println("MiniLiteDB WASM module loaded")
+	fmt.Println("TetoDB WASM module loaded")
 
 	// Register JavaScript functions
-	js.Global().Set("miniLiteOpen", js.FuncOf(openDatabase))
-	js.Global().Set("miniLiteInsert", js.FuncOf(insertDocument))
-	js.Global().Set("miniLiteFind", js.FuncOf(findDocuments))
-	js.Global().Set("miniLiteFindByID", js.FuncOf(findDocumentByID))
-	js.Global().Set("miniLiteUpdate", js.FuncOf(updateDocument))
-	js.Global().Set("miniLiteDelete", js.FuncOf(deleteDocument))
-	js.Global().Set("miniLiteCount", js.FuncOf(countDocuments))
-	js.Global().Set("miniLiteStats", js.FuncOf(getStats))
-	js.Global().Set("miniLiteCompact", js.FuncOf(compactDatabase))
-	js.Global().Set("miniLiteClose", js.FuncOf(closeDatabase))
+	js.Global().Set("tetoDBOpen", js.FuncOf(openDatabase))
+	js.Global().Set("tetoDBInsert", js.FuncOf(insertDocument))
+	js.Global().Set("tetoDBFind", js.FuncOf(findDocuments))
+	js.Global().Set("tetoDBFindByID", js.FuncOf(findDocumentByID))
+	js.Global().Set("tetoDBUpdate", js.FuncOf(updateDocument))
+	js.Global().Set("tetoDBDelete", js.FuncOf(deleteDocument))
+	js.Global().Set("tetoDBCount", js.FuncOf(countDocuments))
+	js.Global().Set("tetoDBStats", js.FuncOf(getStats))
+	js.Global().Set("tetoDBCompact", js.FuncOf(compactDatabase))
+	js.Global().Set("tetoDBClose", js.FuncOf(closeDatabase))
 
-	fmt.Println("MiniLiteDB API functions registered")
+	fmt.Println("TetoDB API functions registered")
 
 	// Keep the Go runtime alive
 	select {}

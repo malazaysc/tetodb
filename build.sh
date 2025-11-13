@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# Build script for MiniLiteDB WebAssembly module
+# Build script for TetoDB WebAssembly module
 
 set -e
 
-echo "Building MiniLiteDB WebAssembly module..."
+echo "Building TetoDB WebAssembly module..."
 
 # Build the WASM binary
-GOOS=js GOARCH=wasm go build -o nodejs/wasm/minilite.wasm ./wasm
+GOOS=js GOARCH=wasm go build -o nodejs/wasm/tetodb.wasm ./wasm
 
-echo "Build complete! WASM module at: nodejs/wasm/minilite.wasm"
+echo "Build complete! WASM module at: nodejs/wasm/tetodb.wasm"
 echo ""
 
 # Copy the Go WASM runtime

@@ -1,8 +1,8 @@
 /**
- * MiniLiteDB - A tiny embeddable NoSQL database compiled to WebAssembly
+ * TetoDB - A tiny embeddable NoSQL database compiled to WebAssembly
  *
  * This module provides a JavaScript wrapper around the Go WASM implementation
- * of MiniLiteDB, offering a clean Promise-based API for Node.js applications.
+ * of TetoDB, offering a clean Promise-based API for Node.js applications.
  */
 
 const fs = require('fs');
@@ -12,9 +12,9 @@ const path = require('path');
 require('../wasm/wasm_exec.js');
 
 /**
- * MiniLiteDB class - Main database interface
+ * TetoDB class - Main database interface
  */
-class MiniLiteDB {
+class TetoDB {
   constructor() {
     this.isOpen = false;
     this.dbPath = null;
@@ -30,7 +30,7 @@ class MiniLiteDB {
       return; // Already initialized
     }
 
-    const wasmPath = path.join(__dirname, '../wasm/minilite.wasm');
+    const wasmPath = path.join(__dirname, '../wasm/tetodb.wasm');
     const wasmBuffer = fs.readFileSync(wasmPath);
 
     const go = new Go();
@@ -50,14 +50,14 @@ class MiniLiteDB {
    * Creates the database if it doesn't exist
    *
    * @param {string} dbPath - Path to the database file
-   * @returns {Promise<MiniLiteDB>} - Returns this for chaining
+   * @returns {Promise<TetoDB>} - Returns this for chaining
    */
   async open(dbPath) {
     if (!this.wasmInstance) {
       await this.init();
     }
 
-    const result = miniLiteOpen(dbPath);
+    const result = tetoDBOpen(dbPath);
 
     if (!result.success) {
       throw new Error(result.error);
@@ -91,7 +91,7 @@ class MiniLiteDB {
   async stats() {
     this._checkOpen();
 
-    const result = miniLiteStats();
+    const result = tetoDBStats();
 
     if (!result.success) {
       throw new Error(result.error);
@@ -109,7 +109,7 @@ class MiniLiteDB {
   async compact() {
     this._checkOpen();
 
-    const result = miniLiteCompact();
+    const result = tetoDBCompact();
 
     if (!result.success) {
       throw new Error(result.error);
@@ -126,7 +126,7 @@ class MiniLiteDB {
       return;
     }
 
-    const result = miniLiteClose();
+    const result = tetoDBClose();
 
     if (!result.success) {
       throw new Error(result.error);
@@ -166,7 +166,7 @@ class Collection {
     this.db._checkOpen();
 
     const jsonDoc = JSON.stringify(document);
-    const result = miniLiteInsert(this.name, jsonDoc);
+    const result = tetoDBInsert(this.name, jsonDoc);
 
     if (!result.success) {
       throw new Error(result.error);
@@ -202,7 +202,7 @@ class Collection {
     this.db._checkOpen();
 
     const filterJSON = Object.keys(filter).length > 0 ? JSON.stringify(filter) : '';
-    const result = miniLiteFind(this.name, filterJSON);
+    const result = tetoDBFind(this.name, filterJSON);
 
     if (!result.success) {
       throw new Error(result.error);
@@ -220,7 +220,7 @@ class Collection {
   async findById(id) {
     this.db._checkOpen();
 
-    const result = miniLiteFindByID(this.name, id);
+    const result = tetoDBFindByID(this.name, id);
 
     if (!result.success) {
       // Document not found
@@ -252,7 +252,7 @@ class Collection {
     this.db._checkOpen();
 
     const updateJSON = JSON.stringify(update);
-    const result = miniLiteUpdate(this.name, id, updateJSON);
+    const result = tetoDBUpdate(this.name, id, updateJSON);
 
     if (!result.success) {
       throw new Error(result.error);
@@ -286,7 +286,7 @@ class Collection {
   async deleteById(id) {
     this.db._checkOpen();
 
-    const result = miniLiteDelete(this.name, id);
+    const result = tetoDBDelete(this.name, id);
 
     if (!result.success) {
       throw new Error(result.error);
@@ -336,7 +336,7 @@ class Collection {
     this.db._checkOpen();
 
     const filterJSON = Object.keys(filter).length > 0 ? JSON.stringify(filter) : '';
-    const result = miniLiteCount(this.name, filterJSON);
+    const result = tetoDBCount(this.name, filterJSON);
 
     if (!result.success) {
       throw new Error(result.error);
@@ -346,4 +346,4 @@ class Collection {
   }
 }
 
-module.exports = { MiniLiteDB, Collection };
+module.exports = { TetoDB, Collection };

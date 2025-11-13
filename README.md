@@ -1,8 +1,8 @@
-# MiniLiteDB
+# TetoDB
 
 A tiny embeddable NoSQL database engine written in Go, compiled to WebAssembly, and designed to be used from Node.js applications.
 
-MiniLiteDB is similar to SQLite but document-oriented (like MongoDB). It provides a simple, file-based storage engine with support for multiple collections, basic CRUD operations, and simple querying capabilities.
+TetoDB is similar to SQLite but document-oriented (like MongoDB). It provides a simple, file-based storage engine with support for multiple collections, basic CRUD operations, and simple querying capabilities.
 
 ## Features
 
@@ -26,12 +26,12 @@ MiniLiteDB is similar to SQLite but document-oriented (like MongoDB). It provide
 │  └───────────────┬───────────────────┘  │
 │                  │                      │
 │  ┌───────────────▼───────────────────┐  │
-│  │   JS Wrapper (minilite.js)       │  │
+│  │   JS Wrapper (tetodb.js)       │  │
 │  └───────────────┬───────────────────┘  │
 │                  │                      │
 │  ┌───────────────▼───────────────────┐  │
 │  │   WebAssembly Module              │  │
-│  │   (minilite.wasm)                 │  │
+│  │   (tetodb.wasm)                 │  │
 │  │                                   │  │
 │  │  ┌─────────────────────────────┐  │  │
 │  │  │  Go Database Engine         │  │  │
@@ -62,10 +62,10 @@ tetodb/
 │   └── main.go         # WASM exports and JS bindings
 ├── nodejs/             # Node.js integration
 │   ├── src/
-│   │   ├── minilite.js # JavaScript wrapper API
+│   │   ├── tetodb.js # JavaScript wrapper API
 │   │   └── server.js   # Express demo server
 │   ├── wasm/           # Built WASM files (generated)
-│   │   ├── minilite.wasm
+│   │   ├── tetodb.wasm
 │   │   └── wasm_exec.js
 │   └── package.json
 ├── go.mod              # Go dependencies
@@ -107,7 +107,7 @@ make build
 go mod download
 
 # Build the WASM module
-GOOS=js GOARCH=wasm go build -o nodejs/wasm/minilite.wasm ./wasm
+GOOS=js GOARCH=wasm go build -o nodejs/wasm/tetodb.wasm ./wasm
 
 # Copy the Go WASM runtime
 cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" nodejs/wasm/
@@ -200,9 +200,9 @@ curl -X POST http://localhost:3000/compact
 ### Opening a Database
 
 ```javascript
-const { MiniLiteDB } = require('./src/minilite');
+const { TetoDB } = require('./src/tetodb');
 
-const db = new MiniLiteDB();
+const db = new TetoDB();
 await db.open('mydata.db');
 ```
 
@@ -256,7 +256,7 @@ await db.close();
 
 ### Storage Format
 
-MiniLiteDB uses a simple append-only log format:
+TetoDB uses a simple append-only log format:
 
 - Each line in the file is a JSON-encoded record
 - Format: `{"collection": "users", "id": "123", "doc": {...}}`
@@ -266,7 +266,7 @@ MiniLiteDB uses a simple append-only log format:
 
 ### In-Memory Index
 
-On startup, MiniLiteDB:
+On startup, TetoDB:
 1. Reads all records from the file
 2. Builds an in-memory map: `collection -> id -> document`
 3. Newer records override older ones
@@ -327,7 +327,7 @@ Possible improvements for learning:
 
 ### WASM Module Not Loading
 
-**Problem**: `Cannot find module '../wasm/minilite.wasm'`
+**Problem**: `Cannot find module '../wasm/tetodb.wasm'`
 
 **Solution**: Make sure you've built the WASM module first:
 ```bash
@@ -368,12 +368,12 @@ The WASM module is architecture-independent, but you can build native Go binarie
 
 ```bash
 # For your current platform
-go build -o minilite ./wasm
+go build -o tetodb ./wasm
 
 # For specific platforms
-GOOS=linux GOARCH=amd64 go build -o minilite-linux ./wasm
-GOOS=darwin GOARCH=arm64 go build -o minilite-mac ./wasm
-GOOS=windows GOARCH=amd64 go build -o minilite.exe ./wasm
+GOOS=linux GOARCH=amd64 go build -o tetodb-linux ./wasm
+GOOS=darwin GOARCH=arm64 go build -o tetodb-mac ./wasm
+GOOS=windows GOARCH=amd64 go build -o tetodb.exe ./wasm
 ```
 
 ### Code Organization
@@ -383,7 +383,7 @@ GOOS=windows GOARCH=amd64 go build -o minilite.exe ./wasm
 - **engine/collection.go**: Collection operations (CRUD)
 - **engine/query.go**: Query filtering and matching logic
 - **wasm/main.go**: WASM exports, JavaScript bindings
-- **nodejs/src/minilite.js**: JavaScript wrapper, Promise-based API
+- **nodejs/src/tetodb.js**: JavaScript wrapper, Promise-based API
 - **nodejs/src/server.js**: Express demo application
 
 ## Contributing

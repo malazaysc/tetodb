@@ -4,9 +4,9 @@
 all: build
 
 build:
-	@echo "Building MiniLiteDB WebAssembly module..."
-	GOOS=js GOARCH=wasm go build -o nodejs/wasm/minilite.wasm ./wasm
-	@echo "Build complete! WASM module at: nodejs/wasm/minilite.wasm"
+	@echo "Building TetoDB WebAssembly module..."
+	GOOS=js GOARCH=wasm go build -o nodejs/wasm/tetodb.wasm ./wasm
+	@echo "Build complete! WASM module at: nodejs/wasm/tetodb.wasm"
 	@echo ""
 	@echo "Copying wasm_exec.js..."
 	@if [ -f "$$(go env GOROOT)/misc/wasm/wasm_exec.js" ]; then \
@@ -22,7 +22,7 @@ build:
 # Clean build artifacts
 clean:
 	@echo "Cleaning build artifacts..."
-	rm -f nodejs/wasm/minilite.wasm
+	rm -f nodejs/wasm/tetodb.wasm
 	rm -f nodejs/wasm/wasm_exec.js
 	rm -f *.db
 	@echo "Clean complete!"
@@ -48,7 +48,7 @@ build-all: build
 
 # Help command
 help:
-	@echo "MiniLiteDB Build Commands:"
+	@echo "TetoDB Build Commands:"
 	@echo "  make build    - Build the WebAssembly module"
 	@echo "  make clean    - Remove build artifacts"
 	@echo "  make test     - Run Go tests"
