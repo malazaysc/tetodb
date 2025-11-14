@@ -1,0 +1,10 @@
+nodejs/node_modules
+nodejs/wasm/*.wasm
+nodejs/wasm/wasm_exec.js
+*.db
+.git
+.gitignore
+README.md
+CLAUDE.md
+build.sh
+Makefile

@@ -1,4 +1,4 @@
-.PHONY: all build clean test install run
+.PHONY: all build clean test install run docker-build docker-run
 
 # Build the WebAssembly module
 all: build
@@ -46,12 +46,30 @@ run: build install
 # Build for different platforms (future expansion)
 build-all: build
 
+# Build using Docker (no Go installation required)
+docker-build:
+	@echo "Building TetoDB with Docker..."
+	@mkdir -p nodejs/wasm
+	@docker build -t tetodb-builder .
+	@docker create --name tetodb-temp tetodb-builder
+	@docker cp tetodb-temp:/output/tetodb.wasm nodejs/wasm/
+	@docker cp tetodb-temp:/output/wasm_exec.js nodejs/wasm/
+	@docker rm tetodb-temp
+	@echo "Build complete! WASM files extracted to nodejs/wasm/"
+
+# Build and run using Docker
+docker-run: docker-build install
+	@echo "Starting demo server..."
+	cd nodejs && node src/server.js
+
 # Help command
 help:
 	@echo "TetoDB Build Commands:"
-	@echo "  make build    - Build the WebAssembly module"
-	@echo "  make clean    - Remove build artifacts"
-	@echo "  make test     - Run Go tests"
-	@echo "  make install  - Install Node.js dependencies"
-	@echo "  make run      - Build and run the demo server"
-	@echo "  make help     - Show this help message"
+	@echo "  make build        - Build the WebAssembly module (requires Go)"
+	@echo "  make docker-build - Build using Docker (no Go required)"
+	@echo "  make clean        - Remove build artifacts"
+	@echo "  make test         - Run Go tests"
+	@echo "  make install      - Install Node.js dependencies"
+	@echo "  make run          - Build and run the demo server"
+	@echo "  make docker-run   - Build with Docker and run the demo server"
+	@echo "  make help         - Show this help message"

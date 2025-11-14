@@ -76,7 +76,7 @@ tetodb/
 
 ## Prerequisites
 
-- **Go 1.23+**: Required to build the WebAssembly module
+- **Go 1.23+** OR **Docker**: Required to build the WebAssembly module (choose one)
 - **Node.js 18+**: Required to run the demo application
 - **Make** (optional): For using the Makefile
 
@@ -91,17 +91,22 @@ cd tetodb
 
 ### 2. Build the WebAssembly Module
 
-**Option A: Using Make**
+**Option A: Using Docker (no Go installation required)**
+```bash
+make docker-build
+```
+
+**Option B: Using Make (requires Go)**
 ```bash
 make build
 ```
 
-**Option B: Using the Build Script**
+**Option C: Using the Build Script (requires Go)**
 ```bash
 ./build.sh
 ```
 
-**Option C: Manual Build**
+**Option D: Manual Build (requires Go)**
 ```bash
 # Download Go dependencies
 go mod download

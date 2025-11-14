@@ -13,7 +13,10 @@ TetoDB is a tiny embeddable NoSQL database engine written in Go, compiled to Web
 ### Building the WebAssembly Module
 
 ```bash
-# Preferred method using Make
+# Using Docker (no Go installation required)
+make docker-build
+
+# Using local Go installation
 make build
 
 # Alternative using build script
@@ -37,11 +40,14 @@ cd nodejs && npm test
 ### Running the Demo Server
 
 ```bash
-# Option 1: Build and run in one command
+# Using Docker (no Go installation required)
+make docker-run
+
+# Using local Go installation
 make run
 
-# Option 2: Manual steps
-make build
+# Manual steps
+make build  # or make docker-build
 cd nodejs
 npm install
 npm start
@@ -135,9 +141,9 @@ To add a new collection-level operation:
 
 ## Prerequisites
 
-- Go 1.23+ (required for building WASM)
-- Node.js 18+ (required for running the application)
-- Make (optional, for using Makefile)
+- **Go 1.23+** OR **Docker** (for building WASM - choose one)
+- **Node.js 18+** (required for running the application)
+- **Make** (optional, for using Makefile)
 
 ## Known Limitations
 
