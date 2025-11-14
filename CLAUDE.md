@@ -145,9 +145,17 @@ To add a new collection-level operation:
 - **Node.js 18+** (required for running the application)
 - **Make** (optional, for using Makefile)
 
+## Storage Architecture
+
+TetoDB uses different storage implementations based on the build target:
+
+- **WASM Build** (`engine/storage_memory.go`): Uses a JavaScript-to-Go bridge to access Node.js file system operations. File persistence works via `nodeFileReadSync`, `nodeFileWriteSync`, `nodeFileAppendSync`, etc. exposed from `nodejs/src/tetodb.js`.
+- **Native Go Build** (`engine/storage_file.go`): Uses standard Go file I/O with `os.OpenFile`, `bufio.Scanner`, etc.
+
+Both implementations provide the same append-only log format for compatibility.
+
 ## Known Limitations
 
-- **In-memory storage for WASM**: The WebAssembly build uses in-memory storage only (no file persistence). Native Go builds support file-based persistence. See `engine/storage_memory.go` and `engine/storage_file.go` with build constraints.
 - No transactions or ACID guarantees
 - No concurrency control (single-threaded)
 - Simple queries only (no $gt, $lt, $in, regex, etc.)

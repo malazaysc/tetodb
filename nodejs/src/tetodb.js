@@ -35,14 +35,41 @@ class TetoDB {
 
     const go = new Go();
 
-    // Set up Node.js file system for Go WASM
-    // The Go WASM runtime expects these globals to be available
-    if (!global.fs) {
-      global.fs = fs;
-    }
-    if (!global.process) {
-      global.process = process;
-    }
+    // Expose Node.js file system operations to Go WASM
+    global.nodeFileReadSync = function(pathStr) {
+      try {
+        const data = fs.readFileSync(pathStr, 'utf8');
+        return data;
+      } catch (err) {
+        if (err.code === 'ENOENT') {
+          return ''; // File doesn't exist, return empty
+        }
+        throw err;
+      }
+    };
+
+    global.nodeFileWriteSync = function(pathStr, data) {
+      fs.writeFileSync(pathStr, data, 'utf8');
+    };
+
+    global.nodeFileAppendSync = function(pathStr, data) {
+      fs.appendFileSync(pathStr, data, 'utf8');
+    };
+
+    global.nodeFileRenameSync = function(oldPath, newPath) {
+      fs.renameSync(oldPath, newPath);
+    };
+
+    global.nodeFileUnlinkSync = function(pathStr) {
+      try {
+        fs.unlinkSync(pathStr);
+      } catch (err) {
+        // Ignore if file doesn't exist
+        if (err.code !== 'ENOENT') {
+          throw err;
+        }
+      }
+    };
 
     const result = await WebAssembly.instantiate(wasmBuffer, go.importObject);
 
