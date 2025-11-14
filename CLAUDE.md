@@ -147,6 +147,7 @@ To add a new collection-level operation:
 
 ## Known Limitations
 
+- **In-memory storage for WASM**: The WebAssembly build uses in-memory storage only (no file persistence). Native Go builds support file-based persistence. See `engine/storage_memory.go` and `engine/storage_file.go` with build constraints.
 - No transactions or ACID guarantees
 - No concurrency control (single-threaded)
 - Simple queries only (no $gt, $lt, $in, regex, etc.)

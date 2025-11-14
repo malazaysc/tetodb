@@ -1,3 +1,5 @@
+// +build !js !wasm
+
 package engine
 
 import (
@@ -7,14 +9,6 @@ import (
 	"os"
 	"sync"
 )
-
-// StorageRecord represents a single record in the storage file
-// Each line in the file is a JSON-encoded StorageRecord
-type StorageRecord struct {
-	Collection string                 `json:"collection"` // Name of the collection
-	ID         string                 `json:"id"`         // Unique document ID
-	Doc        map[string]interface{} `json:"doc"`        // The actual document data
-}
 
 // Storage handles the file-based persistence layer
 // It uses a simple append-only log format where each line is a JSON record

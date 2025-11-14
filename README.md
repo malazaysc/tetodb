@@ -298,13 +298,13 @@ await users.find({ role: "admin", status: "active" });
 
 This is a **learning project** and **not production-ready**. Known limitations:
 
+- **In-Memory Only (WASM)**: When compiled to WebAssembly, TetoDB runs entirely in memory with no file persistence. Data is lost when the process stops. (Native Go builds support file persistence.)
 - **No Transactions**: No ACID guarantees
 - **No Concurrency**: Single-threaded, no locking
 - **Simple Queries**: Only equality matching (no $gt, $lt, $in, etc.)
 - **No Indexes**: All queries scan the collection
 - **Limited Performance**: Not optimized for large datasets
 - **No Schema Validation**: Documents can have any structure
-- **Single File**: All collections in one file
 - **Memory Usage**: Entire database loaded into memory
 
 ## Future Enhancements

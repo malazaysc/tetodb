@@ -274,7 +274,7 @@ func countDocuments(this js.Value, args []js.Value) interface{} {
 
 // getStats returns database statistics
 // Args: []
-// Returns: {success: bool, stats: object, error: string}
+// Returns: {success: bool, stats: string (JSON), error: string}
 func getStats(this js.Value, args []js.Value) interface{} {
 	if db == nil {
 		return makeError("database not open")
@@ -282,8 +282,14 @@ func getStats(this js.Value, args []js.Value) interface{} {
 
 	stats := db.Stats()
 
+	// Serialize to JSON to avoid issues with nested maps
+	jsonBytes, err := json.Marshal(stats)
+	if err != nil {
+		return makeError(fmt.Sprintf("failed to serialize stats: %v", err))
+	}
+
 	return makeSuccess(map[string]interface{}{
-		"stats": stats,
+		"stats": string(jsonBytes),
 	})
 }
 
